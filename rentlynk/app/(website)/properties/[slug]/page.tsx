@@ -4,7 +4,7 @@ export default function Property() {
 
   return (
 
-    <div>Property {""}</div>
+    <div>Property 3</div>
   )
 }
 
