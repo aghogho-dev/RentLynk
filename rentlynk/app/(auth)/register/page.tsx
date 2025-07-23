@@ -27,8 +27,7 @@ export default function RegisterPage() {
 		setError("Passwords don't match.");
 		return;
 		}
-		// TODO: call registration API 
-		// await api.register(form.name, form.email, form.password);
+	
 
 		// On success, redirect to login
 		router.push('/login');

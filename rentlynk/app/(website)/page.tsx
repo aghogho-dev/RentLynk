@@ -5,13 +5,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { auth } from '@/lib/auth';
-import { useSession } from 'next-auth/react';
 
-export default async function HomePage() {
 
- 
-	
+export default function HomePage() {
+
+
+
 	const [search, setSearch] = useState('');
 	const router = useRouter();
 

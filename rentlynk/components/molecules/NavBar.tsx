@@ -1,7 +1,12 @@
+"use client"
 import Image from "next/image";
 import { appUrls } from "@/app/utils/constant";
 import Link from "next/link";
-import { HomeIcon, HousePlugIcon, InfoIcon, LogInIcon } from "lucide-react";
+import { HomeIcon, HousePlugIcon, InfoIcon, LogInIcon, LogOutIcon, User2 } from "lucide-react";
+
+import { Button } from "../ui/button";
+
+import { useSession, signOut } from "next-auth/react";
 
 const navlinks = [
   {
@@ -26,6 +31,7 @@ const navlinks = [
 export function NavBar() {
 
 
+  const { data: session } = useSession()
   return (
 
     <nav className="w-full  flex flex-col md:flex-row  justify-between  border-2">
@@ -43,19 +49,38 @@ export function NavBar() {
       </ul>
 
       <div>
-        <Link href={"/login"} className="flex flex-col md:flex-row justify-center items-center p-2 m-0" >
-          <LogInIcon />
 
-          <span>Login</span>
-        </Link>
+        {session ? (
+          <div className="flex justify-center items-center gap-4">
+            <Link href={"/userprofile"} className="flex flex-col md:flex-row justify-center items-center p-2 m-0" >
+              <User2 />
+              <span>Goto Profile</span>
+            </Link>
+            <Button variant={"link"} type="button" onClick={() => signOut({ callbackUrl: "/" })} >
+              <LogOutIcon />
+              <span>Login Out</span>
+            </Button>
 
-        
+          </div>
+
+        ) :
+
+          (
+            <>
+              <Link href={"/login"} className="flex flex-col md:flex-row justify-center items-center p-2 m-0" >
+                <LogInIcon />
+                <span>Login</span>
+              </Link>
+            </>
+          )
+        }
+
+
+
+
+
       </div>
     </nav>
-
-
-
-
   )
 }
 
