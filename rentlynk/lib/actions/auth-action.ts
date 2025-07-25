@@ -14,17 +14,18 @@ export async function createUser(formData: FormData) {
 		// Get the email and password from the form data
 
 		const userEmail = formData.get("email");
-		
+		const userName = formData.get("name");
 		const userPassword = formData.get("password");
 
 		// Validate the password to make sure it same with the shema
 		const validateCredentials = userSchema.safeParse({
 			email: userEmail,
 			password: userPassword,
+			name: userName,
 		});
-		
+
 		if (validateCredentials.success) {
-			const { email, password } = validateCredentials.data;
+			const { email, password, name } = validateCredentials.data;
 
 			// Hash the password
 			const harshedPassword = bcrypt.hashSync(password, saltRounds);
@@ -34,6 +35,7 @@ export async function createUser(formData: FormData) {
 				data: {
 					email: email,
 					password: harshedPassword,
+					name: name,
 				},
 			});
 			if (!user) {

@@ -9,7 +9,8 @@ export default async function UserProfilePage() {
   }
   return (
     <div>
-      {session.user.email}
+      {session.user?.email}
+      {session.user?.name}
 
       User Profile Page
     </div>

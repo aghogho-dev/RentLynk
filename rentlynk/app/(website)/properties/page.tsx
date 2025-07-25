@@ -12,11 +12,12 @@ export default async function PropertiesPage() {
 
 
   const session = await auth();
-
+  { session?.user?.name }
   if (!session) {
     redirect("/login")
 
   }
+
   // TODO: replace this stub with real data fetching
   const properties = [
     {
@@ -71,8 +72,10 @@ export default async function PropertiesPage() {
           </Link>
         ))}
       </div>
+      
+    {session.user?.name}
+      
 
-      {session?.user.email}
     </main>
   );
 }

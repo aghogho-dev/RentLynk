@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 import { redirect, RedirectType } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 
 
@@ -14,7 +15,7 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ email, password }: LoginFormProps) {
-
+  const [pending, setPending] = useState(false)
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,13 +26,14 @@ export function LoginForm({ email, password }: LoginFormProps) {
 
     email = typeof email1 === "string" ? email1 : null;
     password = typeof password1 === "string" ? password1 : null;
-
+    setPending(true)
     const response = await signIn("credentials", {
       email, password,
       redirect: false
 
     })
     if (response.error) {
+      setPending(false)
       if (response.error === "CredentialsSignin")
         setError("Invalid Login in details")
       if (response.error === "Configuration")
@@ -86,17 +88,17 @@ export function LoginForm({ email, password }: LoginFormProps) {
               </div>
             </div>
 
-            <button
+            <button disabled={pending}
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl shadow-sm transition duration-300"
+              className={cn("w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl shadow-sm transition duration-300", pending ? "cursor-not-allowed" : "cursor-pointer")}
             >
-              Login in
+              {pending ? "Logging In" : "Login in"}
             </button>
           </form>
 
           <p className="mt-6 text-sm text-center text-gray-600">
             Don’t have an account?{" "}
-            <a href="/register" className="font-medium text-blue-600 hover:text-blue-500">
+            <a href="/register" className="font-medium text-blue-600 hover:text-blue-500" >
               Sign up
             </a>
           </p>

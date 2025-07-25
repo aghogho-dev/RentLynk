@@ -11,7 +11,7 @@ export default function RegisterPage() {
 
 	const router = useRouter();
 	const [form, setForm] = useState({
-
+		name: "",
 		email: '',
 		password: '',
 		confirmPassword: '',
@@ -33,9 +33,10 @@ export default function RegisterPage() {
 		const formValue = new FormData()
 		formValue.append("email", form.email)
 		formValue.append("password", form.password)
+		formValue.append("name", form.name)
 
 		const response = await createUser(formValue)
-		
+
 		// On success, redirect to login
 		router.push('/login');
 	};
@@ -47,6 +48,20 @@ export default function RegisterPage() {
 				{error && (<p className="text-red-600 text-sm mb-4">{error}</p>)}
 				<form onSubmit={handleSubmit} className="space-y-5">
 
+					<div>
+						<label htmlFor="name" className="block text-sm font-medium text-gray-700">
+							Full Name
+						</label>
+						<input
+							type="text"
+							id="name"
+							name="name"
+							value={form.name}
+							onChange={handleChange}
+							required
+							className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500"
+						/>
+					</div>
 
 					<div>
 						<label htmlFor="email" className="block text-sm font-medium text-gray-700">
