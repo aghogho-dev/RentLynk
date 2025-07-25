@@ -41,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			},
 			authorize: async (credentials) => {
 				const { success, data } = userSchema.safeParse(credentials);
-
+				console.log(credentials);
 				if (success) {
 					const { email, password } = data;
 					const user = await prisma.user.findUnique({
@@ -52,11 +52,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					if (!user || user.password === null)
 						throw new Error("User not found");
 					const passWordMatched = await bcrypt.compare(password, user.password);
-
+					console.log(user);
 					if (passWordMatched) {
 						return user;
 					}
 				}
+
 				return null;
 			},
 		}),
