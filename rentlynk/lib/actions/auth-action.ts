@@ -14,7 +14,7 @@ export async function createUser(formData: FormData) {
 		// Get the email and password from the form data
 
 		const userEmail = formData.get("email");
-		console.log(userEmail);
+		
 		const userPassword = formData.get("password");
 
 		// Validate the password to make sure it same with the shema
@@ -22,7 +22,7 @@ export async function createUser(formData: FormData) {
 			email: userEmail,
 			password: userPassword,
 		});
-		console.log(validateCredentials);
+		
 		if (validateCredentials.success) {
 			const { email, password } = validateCredentials.data;
 

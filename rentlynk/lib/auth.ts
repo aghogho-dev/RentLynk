@@ -41,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			},
 			authorize: async (credentials) => {
 				const { success, data } = userSchema.safeParse(credentials);
-				console.log(credentials);
+			
 				if (success) {
 					const { email, password } = data;
 					const user = await prisma.user.findUnique({
@@ -52,7 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					if (!user || user.password === null)
 						throw new Error("User not found");
 					const passWordMatched = await bcrypt.compare(password, user.password);
-					console.log(user);
+				
 					if (passWordMatched) {
 						return user;
 					}
@@ -67,13 +67,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		strategy: "database", // or "database" if you want session stored in DB
 		maxAge: 30 * 24 * 60 * 60,
 	},
-	callbacks: {
-		async jwt({ token, account }) {
-			if (account?.provider === "credentials") {
-				token.credentials = true;
-			}
-			return token;
-		},
+	// callbacks: {
+	// 	async session({ session, token }) {
+	// 		// Add custom user info from token to session
+		
+		  
+
+	// 		return session;
+	// 	},
+	// 	async jwt({ token, account }) {
+	// 		if (account?.provider === "credentials") {
+	// 			token.credentials = true;
+	// 		}
+	// 		return token;
+	// 	},
 
 		// async signIn({ user, account, profile, email, credentials }) {
 		// 	// Check if account is OAuth and not linked yet
@@ -108,31 +115,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		// 	}
 		// 	return true;
 		// },
-	},
-	jwt: {
-		encode: async function (params) {
-			if (params.token?.credentials) {
-				const sessionToken = uuid().toString();
+	// },
+	// jwt: {
+	// 	encode: async function (params) {
+	// 		if (params.token?.credentials) {
+				
+	// 			const sessionToken = uuid().toString();
 
-				if (!params.token?.sub) {
-					throw new Error("NO user id found in the session");
-				}
+	// 			if (!params.token?.sub) {
+	// 				throw new Error("NO user id found in the session");
+	// 			}
 
-				const createdSession = await prismaAdapterInstance.createSession?.({
-					sessionToken: sessionToken,
-					userId: params.token.sub!,
-					expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
-				});
+	// 			const createdSession = await prismaAdapterInstance.createSession?.({
+	// 				sessionToken: sessionToken,
+	// 				userId: params.token.sub!,
+	// 				expires: new Date(Date.now() + 30 * 60 * 60 * 1000),
+	// 			});
 
-				if (!createdSession) {
-					throw new Error("Failed to create session");
-				}
+	// 			if (!createdSession) {
+	// 				throw new Error("Failed to create session");
+	// 			}
 
-				return sessionToken;
-			}
-			// Fallback to default encode if no credentials
-			return encode(params);
-		},
-	},
+	// 			return sessionToken;
+	// 		}
+	// 		// Fallback to default encode if no credentials
+	// 		return encode(params);
+	// 	},
+	// },
 	secret: process.env.AUTH_SECRET!,
 });
